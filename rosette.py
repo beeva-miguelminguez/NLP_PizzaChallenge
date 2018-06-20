@@ -1,13 +1,22 @@
-from configparser import ConfigParser
-
+# -*- coding: utf-8 -*-
+# buildin
+import sys
 import json
+
+# vendor
 import requests
 from flask import Blueprint, request
 
-config = ConfigParser()
-config.read("credentials.cfg")
+# assets
+from config import Config
+
+credentials = Config("config/credentials.cfg")
+APIKEY = credentials.get("rosette", "APIKEY")
+if not APIKEY:
+	sys.exit("No Rosette APIKEY")
+
 HEADERS = {
-	"X-RosetteAPI-Key": config.get("rosette", "APIKEY"),
+	"X-RosetteAPI-Key": APIKEY,
 	"Content-Type": "application/json",
 	"Accept": "application/json"
 }
@@ -22,13 +31,12 @@ rosette_blueprint = Blueprint("rosette", __name__)
 def index():
 	return json.dumps({
 		"tokenization": "/rosette/tokens",
-		"part of speech": "/rosette/part-of-speech",
+		"part of speech analysis": "/rosette/part-of-speech",
 		"language detection": "/rosette/language",
 		"entities extraction": "/rosette/entities",
 		"topic extraction": "/rosette/topics",
-		"sentiment analysis": "rosette/sentiment",
-		"categories extraction": "/rosette/categories"
-
+		"sentiment analysis": "/rosette/sentiment",
+		"categories classification": "/rosette/categories"
 	})
 
 

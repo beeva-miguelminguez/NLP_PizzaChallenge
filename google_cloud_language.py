@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # buildin
 import os
 import sys
@@ -5,7 +6,8 @@ import json
 
 # vendor
 import requests
-from flask import Blueprint, request
+from flask import Blueprint
+from flask import request
 from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
@@ -19,27 +21,27 @@ if credentials.get("google", "CREDENTIALS"):
 else:
 	sys.exit("No Google CREDENTIALS")
 
-google_cloud_language_blueprint = Blueprint("google-cloud-language", __name__)
+google_blueprint = Blueprint("google", __name__)
 client = language.LanguageServiceClient()
 
 
 ###############################
 # GOOGLE CLOUD LANGUAGE INDEX #
 ###############################
-@google_cloud_language_blueprint.route("/")
+@google_blueprint.route("/")
 def index():
 	return json.dumps({
-		"sentiment analysis": "/google-cloud-language/sentiment",
-		"entities extraction": "/google-cloud-language/entities",
-		"part of speech analysis": "/google-cloud-language/part-of-speech",
-		"categories classification": "/google-cloud-language/categories",
+		"sentiment analysis": "/google/sentiment",
+		"entities extraction": "/google/entities",
+		"part of speech analysis": "/google/part-of-speech",
+		"categories classification": "/google/categories",
 	})
 
 
 ######################
 # SENTIMENT ANALYSIS #
 ######################
-@google_cloud_language_blueprint.route("/sentiment", methods=[ "POST" ])
+@google_blueprint.route("/sentiment", methods=[ "POST" ])
 def sentiment():
 	content = request.form.get("content")
 	if content:
@@ -61,7 +63,7 @@ def sentiment():
 ######################
 # ENTITES EXTRACTION #
 ######################
-@google_cloud_language_blueprint.route("/entities", methods=[ "POST" ])
+@google_blueprint.route("/entities", methods=[ "POST" ])
 def entities():
 	content = request.form.get("content")
 	if content:
@@ -92,7 +94,7 @@ def entities():
 ###########################
 # PART-OF-SPEECH ANALYSIS #
 ###########################
-@google_cloud_language_blueprint.route("/part-of-speech", methods=[ "POST" ])
+@google_blueprint.route("/part-of-speech", methods=[ "POST" ])
 def partofspeech():
 	content = request.form.get("content")
 	if content:
@@ -119,7 +121,7 @@ def partofspeech():
 #######################
 # TEXT CLASSIFICATION #
 #######################
-@google_cloud_language_blueprint.route("/categories", methods=[ "POST" ])
+@google_blueprint.route("/categories", methods=[ "POST" ])
 def categories():
 	content = request.form.get("content")
 	if content:
