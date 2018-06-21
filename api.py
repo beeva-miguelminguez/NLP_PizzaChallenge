@@ -26,6 +26,7 @@ def index():
 		"Rosette Text Analytics": "/rosette",
 		"Google Cloud Natural Language": "/google",
 		"Azure Text Analytics": "/azure",
+		"Interpretext API": "/interpretext",
 		"Twitter threads extraction": "/twitter"
 	})
 
