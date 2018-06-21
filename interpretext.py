@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # buildin
-import os
-import sys
 import json
 
 # vendor
@@ -101,4 +99,3 @@ def summary():
 			return "Internal server error: %s" % str(e), 500
 
 	return "Bad request: 'content' (multipart/form-data) required.", 400
-

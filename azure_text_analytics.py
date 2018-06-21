@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # buildin
-import os
 import sys
 import json
 
