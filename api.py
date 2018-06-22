@@ -26,7 +26,7 @@ def index():
 		"Google Cloud Natural Language": "/google",
 		"Azure Text Analytics": "/azure",
 		"Interpretext API": "/interpretext",
-		#"Twitter threads extraction": "/twitter"
+		"Twitter threads extraction": "/twitter"
 	})
 
 

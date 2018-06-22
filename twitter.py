@@ -45,7 +45,7 @@ class TwitterUtil:
 	def get_hashtag_tweets(self, hashtag):
 		try:
 			query = hashtag if hashtag.startswith("#") else "#{hashtag}".format(hashtag=hashtag)
-			status = tweepy.Cursor(self.api.search, q=query, count=100, tweet_mode='extended').items()
+			status = self.api.search(q=query, count=200, tweet_mode='extended')
 			return list(map(lambda s: {
 				"date": s.created_at.isoformat(),
 				"text": s.full_text,

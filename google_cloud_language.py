@@ -69,11 +69,14 @@ def entities():
 		try:
 			document = types.Document(content=content, type=enums.Document.Type.PLAIN_TEXT)
 			response = client.analyze_entities(document)
+
+			entity_type = ('UNKNOWN', 'PERSON', 'LOCATION', 'ORGANIZATION',
+						   'EVENT', 'WORK_OF_ART', 'CONSUMER_GOOD', 'OTHER')
 			entities = []
 			for e in response.entities:
 				entity = {
 					"name": e.name,
-					"type": e.type,
+					"type": entity_type[e.type],
 					"salience": e.salience
 				}
 				if e.metadata:
