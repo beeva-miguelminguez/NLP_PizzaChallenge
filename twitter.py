@@ -44,11 +44,12 @@ class TwitterUtil:
 
 	def get_hashtag_tweets(self, hashtag):
 		try:
-			status = self.api.search(q=hashtag)
+			query = hashtag if hashtag.startswith("#") else "#{hashtag}".format(hashtag=hashtag)
+			status = tweepy.Cursor(self.api.search, q=query, count=300, tweet_mode='extended').items()
 			return list(map(lambda s: {
-				"date": s._json["created_at"],
-				"text": s._json["text"],
-				"user": "{user} (@{alias})".format(user=s._json["user"]["name"], alias=s._json["user"]["screen_name"])
+				"date": s.created_at.isoformat(),
+				"text": s.full_text,
+				"user": "{user} (@{alias})".format(user=s.user.name, alias=s.user.screen_name)
 			}, status))
 		except Exception as e:
 			print(e)
@@ -57,31 +58,34 @@ class TwitterUtil:
 		try:
 			status = self.api.user_timeline(screen_name=username, count=count, tweet_mode='extended')
 			return list(map(lambda s: {
-				"date": s._json["created_at"],
-				"text": s._json["full_text"]
+				"date": s.created_at.isoformat(),
+				"text": s.full_text
 			}, status))
 		except Exception as e:
 			print(e)
 
 	def get_user_threads(self, username, count=300):
 		try:
-			tweets = self.get_user_tweets(username, count)
-
+			status = self.api.user_timeline(screen_name=username, count=count, tweet_mode='extended')
+			# Let's fetch all the tweets
+			tweets = [s for s in status]
 			# Let's filter to the main tweets that may be heads in a thread
-			main_twits = list(filter(lambda x: x.in_reply_to_status_id is None, tweets))
+			if len(tweets) > 0:
+				main_twits = list(filter(lambda x: x._json.get("in_reply_to_status_id") is None, tweets))
 
-			# Now we get all the threads that have a reply, forming head:status, replies[status] object
-			timeline_threads = []
-			for twit in main_twits:
-				reply = self.find_reply_to_tweet(twit, tweets)
-				if reply is not None:
-					new_thread = {'head': twit, 'replies': [reply]}
-					timeline_threads.append(new_thread)
+				# Now we get all the threads that have a reply, forming head:status, replies[status] object
+				timeline_threads = []
+				for twit in main_twits:
+					reply = self.find_reply_to_tweet(twit, tweets)
+					if reply is not None:
+						new_thread = {'head': twit, 'replies': [reply]}
+						timeline_threads.append(new_thread)
 
-			# Now we try to find the other replies
-			for thread in timeline_threads:
-				thread['replies'] = self.fetch_all_replies(thread.get('replies')[0], tweets)
-			return timeline_threads
+				# Now we try to find the other replies
+				for thread in timeline_threads:
+					thread['replies'] = self.fetch_all_replies(thread.get('replies')[0], tweets)
+				return timeline_threads
+			return []
 		except Exception as e:
 			print(e)
 

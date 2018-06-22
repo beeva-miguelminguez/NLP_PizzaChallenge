@@ -5,7 +5,6 @@ import sys
 import json
 
 # vendor
-import requests
 from flask import Blueprint
 from flask import request
 from google.cloud import language
