@@ -22,7 +22,7 @@ class TwitterUtil:
 	def authenticate(self):
 		auth = tweepy.OAuthHandler(self.credentials["CONSUMER_KEY"], self.credentials["CONSUMER_SECRET"])
 		auth.set_access_token(self.credentials["ACCESS_TOKEN"], self.credentials["ACCESS_TOKEN_SECRET"])
-		self.api = tweepy.API(auth)
+		self.api = tweepy.API(auth, wait_on_rate_limit=True)
 
 	def find_reply_to_tweet(self, tweet, tweets):
 		for item in tweets:
@@ -45,7 +45,7 @@ class TwitterUtil:
 	def get_hashtag_tweets(self, hashtag):
 		try:
 			query = hashtag if hashtag.startswith("#") else "#{hashtag}".format(hashtag=hashtag)
-			status = tweepy.Cursor(self.api.search, q=query, count=300, tweet_mode='extended').items()
+			status = tweepy.Cursor(self.api.search, q=query, count=100, tweet_mode='extended').items()
 			return list(map(lambda s: {
 				"date": s.created_at.isoformat(),
 				"text": s.full_text,
@@ -53,6 +53,7 @@ class TwitterUtil:
 			}, status))
 		except Exception as e:
 			print(e)
+			raise e
 
 	def get_user_tweets(self, username, count=300):
 		try:
@@ -63,6 +64,7 @@ class TwitterUtil:
 			}, status))
 		except Exception as e:
 			print(e)
+			raise e
 
 	def get_user_threads(self, username, count=300):
 		try:
@@ -88,6 +90,7 @@ class TwitterUtil:
 			return []
 		except Exception as e:
 			print(e)
+			raise e
 
 	def format_threads(self, threads):
 		threads_formated = []
