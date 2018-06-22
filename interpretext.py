@@ -47,7 +47,7 @@ def language():
 ######################
 # ENTITES EXTRACTION #
 ######################
-@interpretext_blueprint.route("/entities", methods=[ "POST" ])
+@interpretext_blueprint.route("/tokenize", methods=[ "POST" ])
 def tokenize():
 	if request.form.get("content"):
 		try:
@@ -66,7 +66,7 @@ def tokenize():
 ######################
 # SENTIMENT ANALYSIS #
 ######################
-@interpretext_blueprint.route("/sentiment", methods=[ "POST" ])
+@interpretext_blueprint.route("/part-of-speech", methods=[ "POST" ])
 def partofspeech():
 	if request.form.get("content"):
 		try:
@@ -85,7 +85,7 @@ def partofspeech():
 ####################
 # TOPIC EXTRACTION #
 ####################
-@interpretext_blueprint.route("/topics", methods=[ "POST" ])
+@interpretext_blueprint.route("/summary", methods=[ "POST" ])
 def summary():
 	if request.form.get("content"):
 		try:

@@ -30,7 +30,7 @@ rosette_blueprint = Blueprint("rosette", __name__)
 @rosette_blueprint.route("/")
 def index():
 	return json.dumps({
-		"tokenization": "/rosette/tokens",
+		"tokenization": "/rosette/tokenize",
 		"part of speech analysis": "/rosette/part-of-speech",
 		"language detection": "/rosette/language",
 		"entities extraction": "/rosette/entities",
@@ -43,7 +43,7 @@ def index():
 ##########
 # TOKENS #
 ##########
-@rosette_blueprint.route("/tokens", methods=[ "POST" ])
+@rosette_blueprint.route("/tokenize", methods=[ "POST" ])
 def tokens():
 	if request.form.get("content"):
 		try:
