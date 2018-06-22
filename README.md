@@ -40,7 +40,7 @@ We have the following endpoints available:
 
 ### 1.2 Rosette Text Analytics (Only English)
 All request must be via `POST` method, and text must be into `content` field via `multipart/form-data`. We have the following endpoints available:
-- `/rosette/tokens`: Retrives content provided splitted into single tokens.
+- `/rosette/tokenize`: Retrives content provided splitted into single tokens.
 - `/rosette/part-of-speech`: Tags whole words with its morphologic category.
 - `/rosette/language`: Detects content language.
 - `/rosette/entities`: Extract entities from the content and retrives contextual information if exists.
